@@ -1,0 +1,57 @@
+.patient-list {
+    width: 300px;
+    height: 151vh;
+    background: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    position: relative;
+    top: 2.9rem;
+  }
+  
+  .patient-container {
+    width: 100%;
+    overflow-y: scroll;
+  }
+  
+  .search-bar {
+    margin-bottom: 15px;
+  }
+  
+  .patient-records {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .patient-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .avatar {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+  
+  .patient-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .patients-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    
+    &:hover{
+        background-color: #d8fcf7;
+    }
+  }
+  

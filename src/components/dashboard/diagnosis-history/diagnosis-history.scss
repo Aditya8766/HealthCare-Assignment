@@ -1,0 +1,73 @@
+.diagnosis-history {
+    margin-top: 3rem;
+  .chart-container {
+    height: 300px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f4f0fe;
+    padding: 10px;
+  }
+
+  .graph-wrapper {
+    flex: 1;
+    min-width: 60%;
+    height: 275px;
+  }
+  
+  .bp-values {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 20%;
+    text-align: center;
+  }
+  
+
+  .health-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .metric-card {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .metric-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .metric-item {
+      text-align: center;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: white;
+
+      .metric-image {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 0.5rem;
+      }
+
+      .status {
+        font-weight: bold;
+        &.normal {
+          color: green;
+        }
+        &.high {
+          color: red;
+        }
+        &.low {
+          color: orange;
+        }
+      }
+    }
+  }
+}
