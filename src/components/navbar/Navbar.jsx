@@ -1,6 +1,16 @@
 import React, { useState } from "react";
-import { Avatar, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
+import {
+  Avatar,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Box,
+  Typography,
+} from "@mui/material";
+import { Menu as MenuIcon, Close as CloseIcon, Image } from "@mui/icons-material";
 import {
   HomeOutlined as HomeIcon,
   PeopleOutlined as PeopleIcon,
@@ -31,43 +41,46 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar__left">
+    <Box className="navbar" display="flex" alignItems="center" justifyContent="space-between">
+      <Box className="navbar__left">
         <img src={Logo} alt="logo" />
-      </div>
+      </Box>
 
-      <div className="navbar__center">
+      <Box className="navbar__center" display="flex" gap={2}>
         {navItems.map(({ id, label, icon }) => (
-          <div
+          <Box
             key={id}
             className={`nav-item ${activeNav === id ? "active" : ""}`}
             onClick={() => setActiveNav(id)}
+            display="flex"
+            alignItems="center"
+            gap={1}
           >
-            {icon} <span>{label}</span>
-          </div>
+            {icon} <Typography>{label}</Typography>
+          </Box>
         ))}
-      </div>
+      </Box>
 
-      <div className="navbar__right">
+      <Box className="navbar__right" display="flex" alignItems="center" gap={2}>
         <Avatar alt="User Profile" src={ProfileImage} />
-        <div className="user-info">
-          <span className="user-name">Dr. Jose Simmons</span>
-          <span className="user-role">General Practitioner</span>
-        </div>
+        <Box className="user-info" display="flex" flexDirection="column">
+          <Typography className="user-name">Dr. Jose Simmons</Typography>
+          <Typography className="user-role">General Practitioner</Typography>
+        </Box>
         <SettingsIcon className="icon" />
         <MoreIcon className="icon" />
 
         <IconButton className="menu-icon" onClick={toggleDrawer(true)}>
           <MenuIcon />
         </IconButton>
-      </div>
+      </Box>
 
       <Drawer anchor="right" open={mobileOpen} onClose={toggleDrawer(false)}>
-        <div className="drawer-header">
+        <Box className="drawer-header" display="flex" justifyContent="flex-end">
           <IconButton onClick={toggleDrawer(false)}>
             <CloseIcon />
           </IconButton>
-        </div>
+        </Box>
         <List>
           {navItems.map(({ id, label, icon }) => (
             <ListItem button key={id} onClick={() => setActiveNav(id)}>
@@ -77,7 +90,7 @@ const Navbar = () => {
           ))}
         </List>
       </Drawer>
-    </nav>
+    </Box>
   );
 };
 

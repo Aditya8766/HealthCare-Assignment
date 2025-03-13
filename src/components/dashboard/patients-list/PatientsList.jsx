@@ -57,14 +57,16 @@ const PatientList = ({ setSelectedPatient }) => {
 
   return (
     <Card className="patient-list">
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <h1 style={{ position: "relative", left: "1rem" }}>Patients</h1>
+      <Box display="flex" alignItems="center">
+        <Typography variant="h5" sx={{ position: "relative", left: "1rem" }}>
+          Patients
+        </Typography>
 
         <SearchOutlinedIcon
-          style={{ marginLeft: "11rem", cursor: "pointer" }}
+          sx={{ marginLeft: "11rem", cursor: "pointer" }}
           onClick={toggleSearch}
         />
-      </div>
+      </Box>
 
       <CardContent className="patient-container">
         {isSearchVisible && (
@@ -72,7 +74,7 @@ const PatientList = ({ setSelectedPatient }) => {
             label="Search Patients"
             variant="outlined"
             fullWidth
-            style={{ marginBottom: "2rem" }}
+            sx={{ marginBottom: "2rem" }}
             className="search-bar"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -82,7 +84,7 @@ const PatientList = ({ setSelectedPatient }) => {
         <Box className="patient-records">
           {filteredPatients.length > 0 ? (
             filteredPatients.map((patient, index) => (
-                <Box
+              <Box
                 key={index}
                 className={`patients-row ${
                   selectedPatient?.id === patient.id ? "selected" : ""
@@ -107,7 +109,6 @@ const PatientList = ({ setSelectedPatient }) => {
                 </Box>
                 <MoreHorizOutlinedIcon className="horizontal-dots-icon" />
               </Box>
-              
             ))
           ) : (
             <Typography>No patients found</Typography>

@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Box,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import "./diagnostic-list.scss";
@@ -35,11 +36,10 @@ const DiagnosticList = () => {
   if (error) return <Typography color="error">Error loading data</Typography>;
   if (!patient) return <Typography>No data found for Jessica Taylor</Typography>;
 
-  const filteredDiagnostics =
-    patient.diagnostic_list?.slice(0, months) || [];
+  const filteredDiagnostics = patient.diagnostic_list?.slice(0, months) || [];
 
   return (
-    <div className="patients__info">
+    <Box className="patients__info">
       <Card>
         <CardContent>
           <Typography variant="h6">Diagnostic List</Typography>
@@ -48,10 +48,7 @@ const DiagnosticList = () => {
             <TableContainer
               component={Paper}
               className="diagnostic-table"
-              sx={{
-                maxHeight: 300, 
-                overflowY: "scroll", 
-              }}
+              sx={{ maxHeight: 300, overflowY: "scroll" }}
             >
               <Table stickyHeader>
                 <TableHead>
@@ -77,7 +74,7 @@ const DiagnosticList = () => {
           )}
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 };
 

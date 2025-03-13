@@ -8,7 +8,7 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import EventIcon from "@mui/icons-material/EventOutlined";
 import GppGoodIcon from "@mui/icons-material/GppGoodOutlined";
 import MaleIcon from "@mui/icons-material/Male";
@@ -40,11 +40,15 @@ const PatientsProfile = ({ selectedPatient }) => {
   );
 
   return (
-    <div className="patients">
+    <Box className="patients">
       <Box className="patients__list">
         <Card>
           <CardContent>
-            <Box className="patients__image" display="flex" justifyContent="center">
+            <Box
+              className="patients__image"
+              display="flex"
+              justifyContent="center"
+            >
               <Avatar
                 src={selectedPatient.profile_picture}
                 alt={selectedPatient.name}
@@ -55,24 +59,52 @@ const PatientsProfile = ({ selectedPatient }) => {
               {selectedPatient.name}
             </Typography>
 
-            {renderDetail("Date Of Birth", EventIcon, `${selectedPatient.age} years old`)}
-            {renderDetail("Gender", selectedPatient.gender === "Male" ? MaleIcon : FemaleIcon, selectedPatient.gender)}
-            {renderDetail("Contact Info", PhoneOutlinedIcon, selectedPatient.phone_number)}
-            {renderDetail("Emergency Contacts", PhoneOutlinedIcon, selectedPatient.emergency_contact)}
-            {renderDetail("Insurance Provider", GppGoodIcon, selectedPatient.insurance_type)}
+            {renderDetail(
+              "Date Of Birth",
+              EventIcon,
+              `${selectedPatient.age} years old`
+            )}
+            {renderDetail(
+              "Gender",
+              selectedPatient.gender === "Male" ? MaleIcon : FemaleIcon,
+              selectedPatient.gender
+            )}
+            {renderDetail(
+              "Contact Info",
+              PhoneOutlinedIcon,
+              selectedPatient.phone_number
+            )}
+            {renderDetail(
+              "Emergency Contacts",
+              PhoneOutlinedIcon,
+              selectedPatient.emergency_contact
+            )}
+            {renderDetail(
+              "Insurance Provider",
+              GppGoodIcon,
+              selectedPatient.insurance_type
+            )}
 
             {showMoreInfo && (
               <>
                 {renderDetail("Address", EventIcon, selectedPatient.address)}
-                {renderDetail("Medical History", GppGoodIcon, selectedPatient.medical_history)}
+                {renderDetail(
+                  "Medical History",
+                  GppGoodIcon,
+                  selectedPatient.medical_history
+                )}
               </>
             )}
 
             {!showMoreInfo && (
               <Box mt={2} textAlign="center">
-                <Button 
+                <Button
                   variant="contained"
-                  sx={{ borderRadius: "20px", color: "black", background: "#01F0D0" }}
+                  sx={{
+                    borderRadius: "20px",
+                    color: "black",
+                    background: "#01F0D0",
+                  }}
                   onClick={() => setShowMoreInfo(true)}
                 >
                   Show All Information
@@ -112,7 +144,7 @@ const PatientsProfile = ({ selectedPatient }) => {
           </CardContent>
         </Card>
       </Box>
-    </div>
+    </Box>
   );
 };
 

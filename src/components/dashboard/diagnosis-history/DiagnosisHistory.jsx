@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Line } from "react-chartjs-2";
-import { Card, CardContent, Typography, MenuItem, Select } from "@mui/material";
+import { Card, CardContent, Typography, MenuItem, Select, Box } from "@mui/material";
 import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined';
 import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined';
 import {
@@ -18,7 +18,7 @@ import "./diagnosis-history.scss";
 import { fetchPatientData } from "../../../api";
 import RespiratoryRate from "../../../assets/respiratory_rate.png";
 import HeartRate from "../../../assets/HeartBPM.png";
-import Tempreture from "../../../assets/temperature.png";
+import Temperature from "../../../assets/temperature.png";
 
 ChartJS.register(
   CategoryScale,
@@ -41,15 +41,15 @@ const DiagnosisHistory = () => {
   const patientData = Array.isArray(data) ? data : [];
   const diagnosisHistory = patientData[0]?.diagnosis_history || [];
 
-  const formattedData = diagnosisHistory.map((entry) => ({
-    ...entry,
-    shortMonth: new Date(
-      entry.year,
-      new Date()
-        .toLocaleString("en-US", { month: "short" })
-        .indexOf(entry.month)
-    ).toLocaleString("en-US", { month: "short" }),
-  }));
+  const formattedData = useMemo(() => {
+    return diagnosisHistory.map((entry) => ({
+      ...entry,
+      shortMonth: new Date(
+        entry.year,
+        new Date().toLocaleString("en-US", { month: "short" }).indexOf(entry.month)
+      ).toLocaleString("en-US", { month: "short" }),
+    }));
+  }, [diagnosisHistory]);
 
   const [monthsToShow, setMonthsToShow] = useState(6);
   const [filteredData, setFilteredData] = useState([]);
@@ -62,15 +62,9 @@ const DiagnosisHistory = () => {
     setMonthsToShow(parseInt(event.target.value, 10));
   };
 
-  const labels = filteredData.map(
-    (entry) => `${entry.shortMonth} ${entry.year}`
-  );
-  const systolicValues = filteredData.map(
-    (entry) => entry.blood_pressure?.systolic?.value || 0
-  );
-  const diastolicValues = filteredData.map(
-    (entry) => entry.blood_pressure?.diastolic?.value || 0
-  );
+  const labels = filteredData.map((entry) => `${entry.shortMonth} ${entry.year}`);
+  const systolicValues = filteredData.map((entry) => entry.blood_pressure?.systolic?.value || 0);
+  const diastolicValues = filteredData.map((entry) => entry.blood_pressure?.diastolic?.value || 0);
 
   const chartData = {
     labels,
@@ -119,178 +113,45 @@ const DiagnosisHistory = () => {
   return (
     <Card className="diagnosis-history">
       <CardContent>
-        <Typography
-          variant="h6"
-          style={{ fontWeight: "600", marginBottom: "1rem" }}
-        >
-          Diagnosis History
-        </Typography>
+        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>Diagnosis History</Typography>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-          }}
-        >
+        <Box display="flex" alignItems="center" justifyContent="space-around">
           <Typography>Blood Pressure</Typography>
-          <Select
-            value={monthsToShow}
-            onChange={handleFilterChange}
-            style={{ marginBottom: "10px", width: "150px", height: "30px" }}
-          >
+          <Select value={monthsToShow} onChange={handleFilterChange} sx={{ mb: 2, width: 150, height: 30 }}>
             <MenuItem value={3}>Last 3 Months</MenuItem>
             <MenuItem value={6}>Last 6 Months</MenuItem>
             <MenuItem value={12}>Last 12 Months</MenuItem>
           </Select>
-        </div>
+        </Box>
 
-        <div className="chart-container">
-          <div className="graph-wrapper">
+        <Box className="chart-container">
+          <Box className="graph-wrapper">
             <Line data={chartData} options={options} />
-          </div>
+          </Box>
 
-          <div className="bp-values">
-            <Typography
-              variant="h6"
-              style={{
-                fontWeight: "700",
-                marginTop: "1rem",
-                marginRight: "1.9rem"
-              }}
-            >
-              {latestEntry?.blood_pressure?.systolic?.value || "N/A"} mmHg
-            </Typography>
-            <Typography
-              variant="subtitle1"
-            >
-              <ArrowDropUpOutlinedIcon />
-              Higher than average
-            </Typography>
+          <Box className="bp-values">
+            <Typography variant="h6" fontWeight={700} mt={2}>{latestEntry?.blood_pressure?.systolic?.value || "N/A"} mmHg</Typography>
+            <Typography variant="subtitle1"><ArrowDropUpOutlinedIcon /> Higher than average</Typography>
+            <Typography variant="h6" fontWeight={700} mt={2}>{latestEntry?.blood_pressure?.diastolic?.value || "N/A"} mmHg</Typography>
+            <Typography variant="subtitle1"><ArrowDropDownOutlinedIcon /> Lower than average</Typography>
+          </Box>
+        </Box>
 
-            <Typography
-              variant="h6"
-              style={{
-                fontWeight: "700",
-                marginTop: "1rem",
-                marginRight: "1.9rem"
-              }}
-            >
-              {latestEntry?.blood_pressure?.diastolic?.value || "N/A"} mmHg
-            </Typography>
-            <Typography
-              variant="subtitle1"
-            >
-              <ArrowDropDownOutlinedIcon />
-              Lower than average
-            </Typography>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "space-around" }}>
-          <Card
-            item
-            xs={4}
-            className="metric"
-            sx={{
-              width: "27%",
-              backgroundColor: "#e0f3fa",
-              borderRadius: "11px",
-            }}
-          >
-            <img
-              src={RespiratoryRate}
-              alt="Respiratory Rate"
-              style={{ marginLeft: "1rem", marginTop: "1rem" }}
-            />
-            <Typography variant="subtitle1" style={{ marginLeft: "0.5rem" }}>
-              Respiratory Rate
-            </Typography>
-            <Typography
-              variant="h6"
-              style={{ fontWeight: "700", marginLeft: "0.5rem" }}
-            >
-              {latestEntry?.respiratory_rate?.value || "N/A"} bpm
-            </Typography>
-            <Typography
-              className={`status ${
-                latestEntry?.respiratory_rate?.levels?.toLowerCase() ||
-                "unknown"
-              }`}
-              style={{ marginLeft: "0.5rem" }}
-            >
-              {latestEntry?.respiratory_rate?.levels || "Unknown"}
-            </Typography>
-          </Card>
-
-          <Card
-            item
-            xs={4}
-            className="metric"
-            sx={{
-              width: "27%",
-              backgroundColor: "#ffe6e9",
-              borderRadius: "11px",
-            }}
-          >
-            <img
-              src={Tempreture}
-              alt="Temperature"
-              style={{ marginLeft: "1rem", marginTop: "1rem" }}
-            />
-            <Typography variant="subtitle1" style={{ marginLeft: "0.5rem" }}>
-              Temperature
-            </Typography>
-            <Typography
-              variant="h6"
-              style={{ fontWeight: "700", marginLeft: "0.5rem" }}
-            >
-              {latestEntry?.temperature?.value || "N/A"}°C
-            </Typography>
-            <Typography
-              className={`status ${
-                latestEntry?.temperature?.levels?.toLowerCase() || "unknown"
-              }`}
-              style={{ marginLeft: "0.5rem" ,fontSize:14}}
-            >
-              {latestEntry?.temperature?.levels || "Unknown"}
-            </Typography>
-          </Card>
-
-          <Card
-            item
-            xs={4}
-            className="metric"
-            sx={{
-              width: "27%",
-              backgroundColor: "#ffe6e9",
-              borderRadius: "11px",
-            }}
-          >
-            <img
-              src={HeartRate}
-              alt="Heart Rate"
-              style={{ marginLeft: "1rem", marginTop: "1rem" }}
-            />
-            <Typography variant="subtitle1" style={{ marginLeft: "0.5rem" ,fontSize:14}}>
-              Heart Rate
-            </Typography>
-            <Typography
-              variant="h6"
-              style={{ fontWeight: "700", marginLeft: "0.5rem" }}
-            >
-              {latestEntry?.heart_rate?.value || "N/A"} bpm
-            </Typography>
-            <Typography
-              className={`status ${
-                latestEntry?.heart_rate?.levels?.toLowerCase() || "unknown"
-              }`}
-              style={{ marginLeft: "0.5rem", display:"flex", alignItems:"center", fontSize:14}}
-            >
-              <ArrowDropDownOutlinedIcon/>{latestEntry?.heart_rate?.levels || "Unknown"}
-            </Typography>
-          </Card>
-        </div>
+        <Box display="flex" justifyContent="space-around">
+          {[{
+            img: RespiratoryRate, title: "Respiratory Rate", value: latestEntry?.respiratory_rate?.value || "N/A", bg: "#e0f3fa"
+          }, {
+            img: Temperature, title: "Temperature", value: latestEntry?.temperature?.value || "N/A", bg: "#ffe6e9"
+          }, {
+            img: HeartRate, title: "Heart Rate", value: latestEntry?.heart_rate?.value || "N/A", bg: "#ffe6e9"
+          }].map((metric, index) => (
+            <Card key={index} className="metric" sx={{ width: "27%", backgroundColor: metric.bg, borderRadius: 2 }}>
+              <img src={metric.img} alt={metric.title} />
+              <Typography variant="subtitle1">{metric.title}</Typography>
+              <Typography variant="h6">{metric.value} bpm</Typography>
+            </Card>
+          ))}
+        </Box>
       </CardContent>
     </Card>
   );

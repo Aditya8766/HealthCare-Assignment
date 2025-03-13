@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem;
+  
+    .patients-section {
+      display: flex;
+      gap: 2rem;
+    }
+  
+    .diagnosis-section {
+      display: flex;
+      flex-direction: column;
+      margin-left: 2rem;
+    }
+  
+    @media (max-width: 1024px) {
+      flex-direction: column;
+      align-items: center;
+  
+      .patients-section {
+        flex-direction: row;
+        gap: 3rem;
+      }
+  
+      .diagnosis-section {
+        margin-left: 0;
+      }
+    }
+  
+    @media (max-width: 768px) {
+      .patients-section {
+        flex-direction: column-reverse;
+        gap: 1rem;
+      }
+  
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+    }
+  }
+  
